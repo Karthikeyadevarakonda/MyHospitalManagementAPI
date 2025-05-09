@@ -1,14 +1,12 @@
-
-FROM openjdk:21-jdk-slim
-
-# Set the working directory inside the container
+# Stage 1: Build the application
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copy the JAR file into the container
-COPY target/HospitalManagement-0.0.1-SNAPSHOT.jar app.jar
-
-# Expose the application port (default Spring Boot port is 8080)
+# Stage 2: Run the application
+FROM openjdk:21-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/HospitalManagement-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-
-# Run the JAR file
 ENTRYPOINT ["java", "-jar", "app.jar"]
