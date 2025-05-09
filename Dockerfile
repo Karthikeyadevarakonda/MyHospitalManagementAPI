@@ -1,4 +1,4 @@
-# Use a base image with JDK
+
 FROM openjdk:21-jdk-slim
 
 # Set the working directory inside the container
